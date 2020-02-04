@@ -1,0 +1,60 @@
+# 混合线性模型 {#lmm}
+
+在开始介绍混合线性模型\index{lmm}之前，我们先看看一个份学生考试成绩\@ref(tab:test)
+
+
+```{r }
+library(tidyverse)
+library(easyuse)
+data(chengdu)
+
+d <- chengdu
+```
+
+
+
+
+```{r test}
+d %>% 
+  head(8) %>% 
+  knitr::kable(
+  caption = 'The test data.',
+  booktabs = TRUE
+)
+```
+
+- score_pre是前一次考试成绩
+- score_post是后一次考试成绩
+
+我们想看看两次考试成绩是否有关联，或者想用第一次考试成绩，预测下一次考试成绩，常用的模型是混合线性模型\index{lme4}
+
+```{r, eval=FALSE}
+lme4::lmer(score_post ~ 1 + score_pre + (1 | effect))
+```
+
+
+为了方便计算不同分组（学校或者班级）下的随机效应(增值分)， 可以是使用`easyuse`包的`get_ran_vals()`函数。
+该函数返回**分组下随机效应和统计描述**
+```{r}
+d %>%
+  get_ran_vals(
+    .var_school = school,
+    .var_class = class,
+    .var_score_pre = score_pre,
+    .var_score_post = score_post,
+    effects = "school"
+  ) %>% 
+  head(8) %>% 
+  knitr::kable(
+    caption = 'The summary data.',
+    booktabs = TRUE
+  )
+```
+
+
+We have a nice figure in Figure \@ref(fig:hello)
+
+```{r hello, fig.cap='Hello World!', out.width='90%'}
+par(mar = c(4, 4, 1, .1))
+plot(cars, pch = 19)
+```

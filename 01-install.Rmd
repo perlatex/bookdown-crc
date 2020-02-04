@@ -1,0 +1,13 @@
+\mainmatter
+
+# 如何安装 {#install}
+
+没打算放在CRAN，所以只能通过github上安装
+
+
+```{r, eval=FALSE, echo=TRUE}
+install.packages("devtools")
+devtools::install_github("perlatex/easyuse")
+```
+
+

@@ -1,0 +1,87 @@
+# 行方向的操作 {#rowwise}
+
+tidyverse行方向的操作，喜欢用`purrr::pmap()`，但遇到特殊的需求，需要写较多的语句，
+比如，给指定的若干列，赋予权重，然后计算行方向的均值或者求和等等。为了简化语句增强可读性，我定义了下面一些函数
+
+
+
+## 行方向求和
+```{r}
+iris %>%
+   add_row_sums(starts_with("Sepal"), .name = "Sepal.sum") %>% 
+   head()
+```
+
+
+
+
+## 行方向求均值
+```{r}
+iris %>%
+   add_row_means(starts_with("Sepal"), .name = "Sepal.Mean") %>% 
+   head()
+```
+
+
+
+## 行方向赋权重再求和
+
+```{r}
+library(tidyverse)
+library(easyuse)
+```
+
+```{r}
+df <- tribble(
+   ~id, ~x, ~y, ~z, ~g,
+   #--|--|--|--|--
+   "a", 13.1, 14, 4, 1,
+   "b", 11.2, 7, 5, 0,
+   "c", 12.5, 10, 1, 0,
+   "d", 20, 11, 3, 1
+   )
+df  
+```
+
+
+
+
+```{r}
+weights <- c(
+   x = 0.25,
+   y = 0.25,
+   z = 0.25,
+   g = 0.25
+ )
+```
+
+
+```{r}
+df %>% 
+  add_weighted_sum(x:g, .name = "wt_sum", .weights = weights)
+
+```
+
+## 行方向赋权重再求均值
+```{r}
+df %>%
+  add_weighted_mean(x:g, .name = "wt_mean", .weights = weights)
+```
+
+## 行方向探测最先匹配
+
+```{r}
+df <- tibble(
+  a = c("b", "d", "l", "m"), 
+  x = c(1, 1, 1, 2), 
+  y = c(5, 1, 2, 3), 
+  z = c(1, 1, 0, 1)
+)
+df
+```
+
+x, y, z三列，行方向选出最先大于1的值，构成新的一列
+```{r}
+df %>% mutate(new_col = row_first_match(~ . > 1, x, y, z))
+```
+

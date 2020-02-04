@@ -1,0 +1,65 @@
+--- 
+title: "关于如何使用easyuse宏包"
+author: "wang minjie"
+date: "`r Sys.Date()`"
+documentclass: krantz
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+colorlinks: yes
+lot: yes
+lof: yes
+site: bookdown::bookdown_site
+description: "A book example for a Chapman & Hall book."
+github-repo: yihui/bookdown-crc
+graphics: yes
+#cover-image: images/cover.jpg
+---
+
+
+```{r setup, include=FALSE}
+options(
+  htmltools.dir.version = FALSE, formatR.indent = 2, width = 55, digits = 4
+)
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE, 
+                      message = FALSE,
+                      fig.width = 6, 
+                      fig.height = 4)
+```
+
+
+
+
+
+# 前言 {-}
+
+事实上，你根本不需要这个宏包。
+
+
+## 为什么有这个宏包 {-}
+
+A Package to make social statistics more easy and more tidyverse. It is very important to me.
+
+
+## 它有那些函数 {-}
+
+```{r}
+library(easyuse)
+lsf.str("package:easyuse")
+```
+
+
+
+
+
+
+## Acknowledgments {-}
+
+A lot of people helped me when I was writing the book.
+
+```{block2, type='flushright', html.tag='p'}
+王敏杰  
+川师图书馆某角落
+```
+

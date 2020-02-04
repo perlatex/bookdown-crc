@@ -1,0 +1,52 @@
+# 给列变量一个阈值 {#cutoffs}
+
+有时候希望获得一个剥夺矩阵\index{剥夺矩阵}，具体来说，就是给列变量一个阈值\index{cutoffs}，超过阈值赋值为0，低于阈值赋值1
+
+
+```{r}
+library(tidyverse)
+library(easyuse)
+```
+
+```{r}
+df <- tribble(
+   ~id, ~x, ~y, ~z, ~g,
+   #--|--|--|--|--
+   "a", 13.1, 14, 4, 1,
+   "b", 11.2, 7, 5, 0,
+   "c", 12.5, 10, 1, 0,
+   "d", 20, 11, 3, 1
+   )
+   
+cutoffs <- list(x = 13, y = 12, z = 3)
+```
+
+
+一般来说，可以使用 `mutate() + if_else()`
+```{r}
+df %>%
+  mutate(x = if_else(x < cutoffs$x, 1, 0)) %>%
+  mutate(y = if_else(y < cutoffs$y, 1, 0)) %>%
+  mutate(z = if_else(z < cutoffs$z, 1, 0))
+```
+
+
+或者使用 `pivot_longer()` ， 然后`pivot_wider()`
+```{r}
+df %>%
+  pivot_longer(cols = x:z, 
+               names_to = "var", 
+               values_to = "val") %>%
+  mutate(below_cutoff = as.integer(val < cutoffs[var])) %>% 
+  select(id, g, var, below_cutoff) %>%
+  pivot_wider(names_from = var, values_from = below_cutoff)
+```
+
+
+当然，我们可以用`cutoffs_modify_at()`函数写的更直观一些
+```{r}
+df %>%
+   cutoffs_modify_at(.vars = c(x, y), cutoffs = c(x = 13, y = 12))
+```
+
+
